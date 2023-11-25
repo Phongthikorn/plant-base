@@ -64,8 +64,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/plant_1.png
-    - assets/water.png
+    - assets/watering-1.png
     - assets/humidity.png
+    - assets/watering-2.png
+    - assets/watering-3.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -83,7 +85,7 @@ flutter:
     - family: K2D
       fonts:
         - asset: fonts/K2D-Regular.ttf
-    - family: K2D
+    - family: Krub
       fonts:
         - asset: fonts/Krub-Regular.ttf
     - family: NotoSans

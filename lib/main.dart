@@ -2,90 +2,31 @@ import 'package:flutter/material.dart';
 import 'core/mqtt_wrapper.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'widget/plant_pot_button.dart';
+import 'package:plant_base/pages/home.dart';
+import 'package:plant_base/pages/status.dart';
 
 void main() {
-  runApp(const CookieClicker());
+  runApp(const PlantBase());
 }
 
-class CookieClicker extends StatefulWidget {
-  const CookieClicker({Key? key});
+class PlantBase extends StatefulWidget {
+  const PlantBase({Key? key});
 
   @override
-  State<StatefulWidget> createState() => CookieClickerState();
+  State<StatefulWidget> createState() => PlantBaseState();
 }
 
-class CookieClickerState extends State<CookieClicker> {
+class PlantBaseState extends State<PlantBase> {
   final MQTTClientWrapper _newClient = MQTTClientWrapper();
-  int _cookieCounter = 0;
+  int _index = 0;
+  final pages = [const HomePage(), const StatusPage()];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Padding(padding: EdgeInsets.only(top: 50.0)),
-              OutlinedButton(
-                onPressed: () {
-                  // TODO: Press Event
-                },
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  child: Row(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Image.asset(
-                          'assets/plant_1.png',
-                          width: 48,
-                          height: 48,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: const Text('ต้นอะไรเนี่ยย'),
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Image.asset(
-                                'assets/water.png',
-                                width: 20,
-                                height: 20,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              // Add your content for the second row here
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        body: pages[_index],
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -120,11 +61,12 @@ class CookieClickerState extends State<CookieClicker> {
               icon: LineIcons.alternateComment,
               text: 'Status',
             ),
-            GButton(
-              icon: LineIcons.alternateSignIn,
-              text: 'Setting',
-            ),
           ],
+          onTabChange: (index) {
+            setState(() {
+              _index = index;
+            });
+          },
           gap: 16,
           rippleColor: Colors.grey[300]!,
           hoverColor: Colors.grey[100]!,
