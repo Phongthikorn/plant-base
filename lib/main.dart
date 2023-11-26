@@ -22,6 +22,12 @@ class PlantBaseState extends State<PlantBase> {
   int _index = 0;
   final pages = [const HomePage(), const StatusPage()];
 
+  void setPage(index) {
+    setState(() {
+      _index = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -42,8 +48,8 @@ class PlantBaseState extends State<PlantBase> {
             child: const Text(
               "Plant-Base",
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
+                color: Colors.green,
+                fontSize: 20,
                 fontFamily: 'K2D',
                 fontWeight: FontWeight.normal,
               ),

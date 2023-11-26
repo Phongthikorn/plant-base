@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PlantPotButton extends StatefulWidget {
+
   const PlantPotButton({super.key});
 
   @override
@@ -12,7 +13,7 @@ class _PlantPotButtonState extends State<PlantPotButton> {
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: () {
-        // TODO: Press Event
+
       },
       style: OutlinedButton.styleFrom(
         foregroundColor: Colors.green,
@@ -36,7 +37,6 @@ class _PlantPotButtonState extends State<PlantPotButton> {
             ),
             const SizedBox(width: 8),
             Expanded(
-
               child: Align(
                 alignment: Alignment.center,
                 child: Container(
