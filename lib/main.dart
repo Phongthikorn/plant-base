@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:plant_base/pages/pot_setting.dart';
+import 'package:plant_base/utils/page_provider.dart';
+import 'package:provider/provider.dart';
 import 'core/mqtt_wrapper.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
@@ -7,7 +10,12 @@ import 'package:plant_base/pages/home.dart';
 import 'package:plant_base/pages/status.dart';
 
 void main() {
-  runApp(const PlantBase());
+  runApp(
+    ChangeNotifierProvider(
+        create: (context) => PageProvider(),
+        child: const PlantBase()
+    )
+  );
 }
 
 class PlantBase extends StatefulWidget {
@@ -20,7 +28,7 @@ class PlantBase extends StatefulWidget {
 class PlantBaseState extends State<PlantBase> {
   final MQTTClientWrapper _newClient = MQTTClientWrapper();
   int _index = 0;
-  final pages = [const HomePage(), const StatusPage()];
+  final pages = [const HomePage(), const StatusPage(), const PotSettingPage()];
 
   void setPage(index) {
     setState(() {
@@ -30,9 +38,9 @@ class PlantBaseState extends State<PlantBase> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return Consumer<PageProvider>(builder: (context, value, child) => MaterialApp(
       home: Scaffold(
-        body: pages[_index],
+        body: pages[value.pageIndex.toInt()],
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -69,9 +77,8 @@ class PlantBaseState extends State<PlantBase> {
             ),
           ],
           onTabChange: (index) {
-            setState(() {
-              _index = index;
-            });
+            final pageProvider = context.read<PageProvider>();
+            pageProvider.selectPage(index);
           },
           gap: 16,
           rippleColor: Colors.grey[300]!,
@@ -85,6 +92,6 @@ class PlantBaseState extends State<PlantBase> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         ),
       ),
-    );
+    ),);
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:plant_base/utils/page_provider.dart';
+import 'package:provider/provider.dart';
 
 class PlantPotButton extends StatefulWidget {
 
@@ -11,9 +13,10 @@ class PlantPotButton extends StatefulWidget {
 class _PlantPotButtonState extends State<PlantPotButton> {
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
+    return Consumer<PageProvider>(builder: (context, value, child) => OutlinedButton(
       onPressed: () {
-
+        final page_provider = context.read<PageProvider>();
+        page_provider.selectPage(2);
       },
       style: OutlinedButton.styleFrom(
         foregroundColor: Colors.green,
@@ -44,8 +47,8 @@ class _PlantPotButtonState extends State<PlantPotButton> {
                   child: const Text(
                     "ต้นอะไรเนี่ยยยยยยยยยยยยยยยยยยยยยยยยยยยยย",
                     style: TextStyle(
-                      fontFamily: "NotoSans",
-                      fontSize: 15
+                        fontFamily: "NotoSans",
+                        fontSize: 15
                     ),
                   ),
                 ),
@@ -63,7 +66,7 @@ class _PlantPotButtonState extends State<PlantPotButton> {
                       Text(
                         "1 ชม.",
                         style: TextStyle(
-                          fontFamily: "NotoSans",
+                            fontFamily: "NotoSans",
                             fontSize: 15
                         ),
                       )
@@ -75,11 +78,11 @@ class _PlantPotButtonState extends State<PlantPotButton> {
                     children: [
                       Image.asset('assets/humidity.png', width: 25, height: 25),
                       Text(
-                          "23%",
-                          style: TextStyle(
+                        "23%",
+                        style: TextStyle(
                             fontFamily: "NotoSans",
                             fontSize: 15
-                          ),
+                        ),
                       )
                     ],
                   ),
@@ -89,6 +92,6 @@ class _PlantPotButtonState extends State<PlantPotButton> {
           ],
         ),
       ),
-    );
+    ),);
   }
 }
