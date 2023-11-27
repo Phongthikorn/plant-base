@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:plant_base/widget/watering_settng/humidity_setting.dart';
+import 'package:plant_base/widget/watering_settng/time_setting.dart';
+import 'package:plant_base/widget/watering_settng/timer_setting.dart';
 
 class PotSettingPage extends StatefulWidget {
 
@@ -12,12 +15,13 @@ class PotSettingPage extends StatefulWidget {
 
 class _PotSettingPageState extends State<PotSettingPage> {
 
+  int _pageIndex = 0;
   String? value = "Humidity";
+  final settingWidget = [HumiditySetting(), const TimeSetting(), const TimerSetting()];
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -136,6 +140,17 @@ class _PotSettingPageState extends State<PotSettingPage> {
                   onChanged: (String? value) {
                     setState(() {
                       this.value = value;
+                      switch (this.value) {
+                        case "Humidity":
+                          _pageIndex = 0;
+                          break;
+                        case "Time":
+                          _pageIndex = 1;
+                          break;
+                        case "Timer":
+                          _pageIndex = 2;
+                          break;
+                      }
                     });
                   },
                   items: const [
@@ -145,7 +160,30 @@ class _PotSettingPageState extends State<PotSettingPage> {
                         "ความชื้น",
                         style: TextStyle(
                           fontFamily: "NotoSans",
-                          fontSize: 16
+                          fontSize: 16,
+                          color: Colors.cyan
+                        ),
+                      ),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: "Time",
+                      child: Text(
+                        "เวลาที่กำหนด",
+                        style: TextStyle(
+                            fontFamily: "NotoSans",
+                            fontSize: 16,
+                            color: Colors.cyan
+                        ),
+                      ),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: "Timer",
+                      child: Text(
+                        "จับเวลา",
+                        style: TextStyle(
+                            fontFamily: "NotoSans",
+                            fontSize: 16,
+                            color: Colors.cyan
                         ),
                       ),
                     )
@@ -154,10 +192,15 @@ class _PotSettingPageState extends State<PotSettingPage> {
               ),
             ],
           ),
+          Divider(
+            color: Colors.grey[200],
+            endIndent: 150,
+            indent: 150,
+            height: 30,
+            thickness: 2,
+          ),
           Container(
-            color: Colors.grey,
-            width: 200,
-            height: 200,
+            child: settingWidget[_pageIndex],
           ),
           Divider(
             color: Colors.grey[300],

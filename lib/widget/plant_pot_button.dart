@@ -15,13 +15,17 @@ class _PlantPotButtonState extends State<PlantPotButton> {
   Widget build(BuildContext context) {
     return Consumer<PageProvider>(builder: (context, value, child) => OutlinedButton(
       onPressed: () {
-        final page_provider = context.read<PageProvider>();
-        page_provider.selectPage(2);
+        final pageProvider = context.read<PageProvider>();
+        pageProvider.selectPage(2);
       },
-      style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.green,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all(Colors.green),
+        backgroundColor: MaterialStateProperty.all(Colors.white),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+            side: BorderSide.none, // Set border side to none
+          ),
         ),
       ),
       child: Container(
@@ -42,7 +46,7 @@ class _PlantPotButtonState extends State<PlantPotButton> {
             Expanded(
               child: Align(
                 alignment: Alignment.center,
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.38,
                   child: const Text(
                     "ต้นอะไรเนี่ยยยยยยยยยยยยยยยยยยยยยยยยยยยยย",
@@ -54,7 +58,7 @@ class _PlantPotButtonState extends State<PlantPotButton> {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width * 0.175,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -63,7 +67,7 @@ class _PlantPotButtonState extends State<PlantPotButton> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Image.asset('assets/watering-3.png', width: 25, height: 25),
-                      Text(
+                      const Text(
                         "1 ชม.",
                         style: TextStyle(
                             fontFamily: "NotoSans",
@@ -77,7 +81,7 @@ class _PlantPotButtonState extends State<PlantPotButton> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Image.asset('assets/humidity.png', width: 25, height: 25),
-                      Text(
+                      const Text(
                         "23%",
                         style: TextStyle(
                             fontFamily: "NotoSans",

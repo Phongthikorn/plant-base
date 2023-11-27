@@ -41,6 +41,7 @@ class PlantBaseState extends State<PlantBase> {
     return Consumer<PageProvider>(builder: (context, value, child) => MaterialApp(
       home: Scaffold(
         body: pages[value.pageIndex.toInt()],
+        backgroundColor: Colors.grey[50],
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -66,6 +67,7 @@ class PlantBaseState extends State<PlantBase> {
           centerTitle: true,
         ),
         bottomNavigationBar: GNav(
+          backgroundColor: Colors.white,
           tabs: const [
             GButton(
               icon: LineIcons.home,
