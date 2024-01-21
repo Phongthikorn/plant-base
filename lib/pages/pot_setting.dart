@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -15,12 +16,32 @@ class PotSettingPage extends StatefulWidget {
 
 class _PotSettingPageState extends State<PotSettingPage> {
 
+  final fb = FirebaseDatabase.instance.ref();
+  int _humidity = 10;
+
   int _pageIndex = 0;
   String? value = "Humidity";
   final settingWidget = [HumiditySetting(), const TimeSetting(), const TimerSetting()];
 
   @override
+  void initState() {
+    super.initState();
+    _activeListeners();
+  }
+
+  void _activeListeners() {
+    fb.child('Status/Humidity').onValue.listen((event) {
+      final String currentHumidity = event.snapshot.value.toString();
+      
+      setState(() {
+        _humidity = int.parse(currentHumidity);
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,25 +60,28 @@ class _PotSettingPageState extends State<PotSettingPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               CircularPercentIndicator(
+                animation: true,
+                animationDuration: 1000,
                 radius: 80,
                 lineWidth: 12,
-                percent: 0.7,
-                center: const Column(
+                percent: _humidity/100,
+                center: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "50%",
+                       '${_humidity}%',
                       style: TextStyle(
                         fontFamily: "NotoSans",
-                        fontSize: 30,
+                        fontSize: 28,
                         color: Colors.cyan,
                       ),
                     ),
+
                     Text(
                       "ความชื้น",
                       style: TextStyle(
                         fontFamily: "NotoSans",
-                        fontSize: 17,
+                        fontSize: 15,
                         color: Colors.cyan,
                       ),
                     ),
@@ -83,10 +107,10 @@ class _PotSettingPageState extends State<PotSettingPage> {
                       ),
                     ),
                     Text(
-                      "ระดับน้ำที่เหลืออยู่",
+                      "ระดับน้ำที่\nเหลืออยู่",
                       style: TextStyle(
                         fontFamily: "NotoSans",
-                        fontSize: 17,
+                        fontSize: 13,
                         color: Colors.cyan,
                       ),
                     ),

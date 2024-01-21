@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_base/pages/pot_setting.dart';
 import 'package:plant_base/utils/page_provider.dart';
@@ -9,7 +10,9 @@ import 'widget/plant_pot_button.dart';
 import 'package:plant_base/pages/home.dart';
 import 'package:plant_base/pages/status.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     ChangeNotifierProvider(
         create: (context) => PageProvider(),
