@@ -5,7 +5,6 @@ enum MqttCurrentConnectionState {
   DISCONNECTED,
   ERROR_WHEN_CONNECTING
 }
-
 enum MqttSubscriptionState {
   IDLE,
   SUBSCRIBED

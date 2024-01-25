@@ -18,7 +18,6 @@ class _PotSettingPageState extends State<PotSettingPage> {
 
   final fb = FirebaseDatabase.instance.ref();
   int _humidity = 10;
-
   int _pageIndex = 0;
   String? value = "Humidity";
   final settingWidget = [HumiditySetting(), const TimeSetting(), const TimerSetting()];
