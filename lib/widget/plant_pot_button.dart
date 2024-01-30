@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_base/utils/page_provider.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,9 @@ class PlantPotButton extends StatefulWidget {
 }
 
 class _PlantPotButtonState extends State<PlantPotButton> {
+
+  final fb = FirebaseDatabase.instance.ref();
+
   @override
   Widget build(BuildContext context) {
     return Consumer<PageProvider>(builder: (context, value, child) => OutlinedButton(
@@ -49,7 +53,7 @@ class _PlantPotButtonState extends State<PlantPotButton> {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.38,
                   child: const Text(
-                    "ต้นอะไรเนี่ยยยยยยยยยยยยยยยยยยยยยยยยยยยยย",
+                    "ต้นไม้",
                     style: TextStyle(
                         fontFamily: "NotoSans",
                         fontSize: 15
@@ -58,41 +62,41 @@ class _PlantPotButtonState extends State<PlantPotButton> {
                 ),
               ),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.175,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset('assets/watering-3.png', width: 25, height: 25),
-                      const Text(
-                        "1 ชม.",
-                        style: TextStyle(
-                            fontFamily: "NotoSans",
-                            fontSize: 15
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.width * 0.02,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Image.asset('assets/humidity.png', width: 25, height: 25),
-                      const Text(
-                        "23%",
-                        style: TextStyle(
-                            fontFamily: "NotoSans",
-                            fontSize: 15
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            // SizedBox(
+            //   width: MediaQuery.of(context).size.width * 0.175,
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           Image.asset('assets/watering-3.png', width: 25, height: 25),
+            //           const Text(
+            //             "1 ชม.",
+            //             style: TextStyle(
+            //                 fontFamily: "NotoSans",
+            //                 fontSize: 15
+            //             ),
+            //           )
+            //         ],
+            //       ),
+            //       SizedBox(height: MediaQuery.of(context).size.width * 0.02,),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           Image.asset('assets/humidity.png', width: 25, height: 25),
+            //           const Text(
+            //             '',
+            //             style: TextStyle(
+            //                 fontFamily: "NotoSans",
+            //                 fontSize: 15
+            //             ),
+            //           )
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
