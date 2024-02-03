@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_base/core/pot_data.dart';
 import 'package:plant_base/pages/pot_setting.dart';
 import 'package:plant_base/utils/page_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'core/mqtt_wrapper.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
@@ -13,12 +15,17 @@ import 'package:plant_base/pages/status.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(
-    ChangeNotifierProvider(
-        create: (context) => PageProvider(),
-        child: const PlantBase()
-    )
-  );
+    MultiProvider(
+        providers: [
+      ChangeNotifierProvider(
+          create: (context) => PageProvider(),
+      ),
+      ChangeNotifierProvider(
+          create: (context) => PotData(),
+      )], child: const PlantBase()
+    ));
 }
 
 class PlantBase extends StatefulWidget {
@@ -41,7 +48,8 @@ class PlantBaseState extends State<PlantBase> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PageProvider>(builder: (context, value, child) => MaterialApp(
+
+    return Consumer2<PageProvider, PotData>(builder: (context, value, value2, child) => MaterialApp(
       home: Scaffold(
         body: pages[value.pageIndex.toInt()],
         backgroundColor: Colors.grey[50],
@@ -84,6 +92,7 @@ class PlantBaseState extends State<PlantBase> {
           onTabChange: (index) {
             final pageProvider = context.read<PageProvider>();
             pageProvider.selectPage(index);
+
           },
           gap: 16,
           rippleColor: Colors.grey[300]!,

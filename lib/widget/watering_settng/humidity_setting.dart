@@ -1,5 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_base/core/pot_data.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class HumiditySetting extends StatefulWidget {
@@ -8,19 +11,25 @@ class HumiditySetting extends StatefulWidget {
 }
 
 class _HumiditySettingState extends State<HumiditySetting> {
-  double _humiditySliderValue = 50.0; // Use double instead of int
-  double _timeSliderValue = 5.0; // Use double instead of int
+  final fb = FirebaseDatabase.instance.ref("Setting");
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+
+    return Consumer<PotData>(builder: (context, value, child) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${_humiditySliderValue.round()}%',
+                '${value.targetHumidity.round()}%',
                 style: const TextStyle(
                   fontFamily: 'NotoSans',
                   fontSize: 25,
@@ -42,21 +51,20 @@ class _HumiditySettingState extends State<HumiditySetting> {
                     ),
                     Expanded(
                       child: Slider(
-                        value: _humiditySliderValue,
+                        value: value.targetHumidity,
                         onChanged: (value) {
-                          final fb = FirebaseDatabase.instance.ref().child("Setting").update({
-                            "Humidity": value
-                          });
-                          setState(() {
-                            _humiditySliderValue = value;
-                          });
+                          // final fb = FirebaseDatabase.instance.ref().child("Setting").update({
+                          //   "Humidity": value
+                          // });
+                          final target = context.read<PotData>();
+                          target.setTargetHumidity(value);
                         },
                         min: 0,
                         max: 100,
                         divisions: 100,
                         activeColor: Colors.cyan,
                         inactiveColor: Colors.cyan[100],
-                        label: '${_humiditySliderValue.round()}',
+                        label: '${value.targetHumidity.round()}',
 
                       ),
                     ),
@@ -92,7 +100,7 @@ class _HumiditySettingState extends State<HumiditySetting> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${_timeSliderValue.round()} วินาที',
+                '${value.targetTime.round()} วินาที',
                 style: const TextStyle(
                   fontFamily: 'NotoSans',
                   fontSize: 25,
@@ -114,21 +122,20 @@ class _HumiditySettingState extends State<HumiditySetting> {
                     ),
                     Expanded(
                       child: Slider(
-                        value: _timeSliderValue,
+                        value: value.targetTime,
                         onChanged: (value) {
-                          final fb = FirebaseDatabase.instance.ref().child("Setting").update({
-                            "WateringBatchWait": value
-                          });
-                          setState(() {
-                            _timeSliderValue = value;
-                          });
+                          // final fb = FirebaseDatabase.instance.ref().child("Setting").update({
+                          //   "WateringBatchWait": value
+                          // });
+                          final target = context.read<PotData>();
+                          target.setTargetTime(value);
                         },
                         min: 0,
-                        max: 100,
-                        divisions: 100,
+                        max: 120,
+                        divisions: 120,
                         activeColor: Colors.cyan,
                         inactiveColor: Colors.cyan[100],
-                        label: '${_timeSliderValue.round()}',
+                        label: '${value.targetTime.round()}',
 
                       ),
                     ),
@@ -152,9 +159,32 @@ class _HumiditySettingState extends State<HumiditySetting> {
                 ),
               ),
             ],
-          )
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: Size(300, 30),
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+                    backgroundColor:  Colors.cyan[300]
+                ),
+                onPressed: () async {
+                  FirebaseDatabase.instance.ref().child("Setting").update({
+                    "Humidity": value.targetHumidity,
+                    "WateringBatch": value.targetTime,
+                  });
+                  final potDataProvider = context.read<PotData>();
+                  potDataProvider.saveData();
+                },
+                child: Text("ยืนยันการตั้งค่า"),
+              )
+            ],
+          ),
         ]
-    );
+    )) ;
 
   }
 }

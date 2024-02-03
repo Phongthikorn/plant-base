@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_base/core/pot_data.dart';
 import 'package:plant_base/utils/page_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -17,10 +18,12 @@ class _PlantPotButtonState extends State<PlantPotButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PageProvider>(builder: (context, value, child) => OutlinedButton(
+    return Consumer2<PageProvider, PotData>(builder: (context, value, value2, child) => OutlinedButton(
       onPressed: () {
         final pageProvider = context.read<PageProvider>();
         pageProvider.selectPage(2);
+        var potDataProvider = context.read<PotData>();
+        potDataProvider.setupData();
       },
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.all(Colors.green),
