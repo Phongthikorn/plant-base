@@ -131,8 +131,8 @@ class _HumiditySettingState extends State<HumiditySetting> {
                           target.setTargetTime(value);
                         },
                         min: 0,
-                        max: 120,
-                        divisions: 120,
+                        max: 20,
+                        divisions: 20,
                         activeColor: Colors.cyan,
                         inactiveColor: Colors.cyan[100],
                         label: '${value.targetTime.round()}',
@@ -140,7 +140,7 @@ class _HumiditySettingState extends State<HumiditySetting> {
                       ),
                     ),
                     const Text(
-                      '120',
+                      '20',
                       style: TextStyle(
                         fontFamily: 'NotoSans',
                         fontSize: 18,
@@ -174,7 +174,7 @@ class _HumiditySettingState extends State<HumiditySetting> {
                 onPressed: () async {
                   FirebaseDatabase.instance.ref().child("Setting").update({
                     "Humidity": value.targetHumidity,
-                    "WateringBatch": value.targetTime,
+                    "WateringBatchDurartion": value.targetTime,
                   });
                   final potDataProvider = context.read<PotData>();
                   potDataProvider.saveData();

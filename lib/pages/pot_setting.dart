@@ -27,6 +27,7 @@ class _PotSettingPageState extends State<PotSettingPage> {
   int _pageIndex = 0;
   String? value = "Humidity";
   bool isSwitched = false;
+  bool _isWatering = false;
 
   final settingWidget = [HumiditySetting(), const TimeSetting(), const TimerSetting()];
 
@@ -49,10 +50,24 @@ class _PotSettingPageState extends State<PotSettingPage> {
       int toSet = int.parse(currentLevel);
       if (toSet <= 100 && toSet >= 0) {
         setState(() {
-          _level = int.parse(currentLevel);
+          _level = toSet;
+
         });
       }
-
+    });
+      fb.child('Status/IsWatering').onValue.listen((event) {
+        final String currentIsWatering = event.snapshot.value.toString();
+        int toSet = int.parse(currentIsWatering);
+        print(toSet);
+        if (toSet == 0 ) {
+          setState(() {
+            _isWatering = false;
+          });
+        } else {
+          setState(() {
+            _isWatering = true;
+          });
+        }
 
     });
   }
@@ -140,6 +155,27 @@ class _PotSettingPageState extends State<PotSettingPage> {
               ),
             ],
           ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.047),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              const Text(
+                "สถานะการรดน้ำ",
+                style: TextStyle(
+                  fontFamily: "NotoSans",
+                  fontSize: 20,
+                  color: Colors.green,
+                ),
+              ),
+              CupertinoSwitch(
+
+                value: _isWatering,
+                onChanged: null,
+                activeColor: Colors.cyan,
+
+              )
+            ],
+          ),
           Divider(
             color: Colors.grey[300],
             endIndent: 60,
@@ -158,19 +194,40 @@ class _PotSettingPageState extends State<PotSettingPage> {
                   color: Colors.green,
                 ),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: Size(100, 30),
-                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
-                    backgroundColor:  Colors.cyan[300]
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children:
+                [
+                  ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: Size(70, 30),
+                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+                      backgroundColor:  Colors.cyan[300]
+                  ),
+                  onPressed: () {
+                    fb.child("Setting").update({
+                      "InstantWatering": 1,
+                    });
+                  },
+                  child: Text("รดน้ำ"),
                 ),
-                onPressed: () {
-                  fb.child("Setting").update({
-                    "InstantWatering": 1,
-                  });
-                },
-                child: Text("รดน้ำ"),
-              )
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.02),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size(50, 30),
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+                        backgroundColor:  Colors.black12
+                    ),
+                    onPressed: () {
+                      fb.child("Setting").update({
+                        "InstantWatering": 0,
+                      });
+                    },
+                    child: Text("หยุด"),
+                  )
+                ],
+              ),
+
             ],
           ),
           Divider(
@@ -193,7 +250,7 @@ class _PotSettingPageState extends State<PotSettingPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               const Text(
-                "การรดน้ำ",
+                "รดน้ำอัตโนมัติ",
                 style: TextStyle(
                   fontFamily: "NotoSans",
                   fontSize: 20,
@@ -201,16 +258,16 @@ class _PotSettingPageState extends State<PotSettingPage> {
                 ),
               ),
               Switch(
-                value: isSwitched,
+                value: value.isEnable,
                 onChanged: (value) {
+                  final target = context.read<PotData>();
+
                   int boolean = value == true ? 1 : 0;
                   fb.child("Setting").update({
                     "IsEnableWatering": boolean,
                   });
 
-                  setState(() {
-                    isSwitched = value;
-                  });
+                  target.setEnable(value);
                 },
                 activeColor: Colors.cyan,
                 activeTrackColor: Colors.cyan[100],
@@ -325,7 +382,7 @@ class _PotSettingPageState extends State<PotSettingPage> {
               color: Colors.green,
             ),
           ),
-          // EspCamera(channel: IOWebSocketChannel.connect('ws://35.240.210.6:65080'))
+          EspCamera(channel: IOWebSocketChannel.connect('ws://35.240.210.6:65080'))
         ],
       ),
     )) ;

@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_base/core/firebase_api.dart';
 import 'package:plant_base/core/pot_data.dart';
 import 'package:plant_base/pages/pot_setting.dart';
 import 'package:plant_base/utils/page_provider.dart';
@@ -15,6 +16,7 @@ import 'package:plant_base/pages/status.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseApi().initNotofication();
 
   runApp(
     MultiProvider(
@@ -24,8 +26,19 @@ void main() async {
       ),
       ChangeNotifierProvider(
           create: (context) => PotData(),
-      )], child: const PlantBase()
-    ));
+      )], child: MyApp()
+    )
+  );
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: PlantBase(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
 }
 
 class PlantBase extends StatefulWidget {
@@ -50,6 +63,7 @@ class PlantBaseState extends State<PlantBase> {
   Widget build(BuildContext context) {
 
     return Consumer2<PageProvider, PotData>(builder: (context, value, value2, child) => MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: pages[value.pageIndex.toInt()],
         backgroundColor: Colors.grey[50],
@@ -84,10 +98,7 @@ class PlantBaseState extends State<PlantBase> {
               icon: LineIcons.home,
               text: "Home",
             ),
-            GButton(
-              icon: LineIcons.alternateComment,
-              text: 'Status',
-            ),
+
           ],
           onTabChange: (index) {
             final pageProvider = context.read<PageProvider>();
@@ -101,7 +112,6 @@ class PlantBaseState extends State<PlantBase> {
           iconSize: 26,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           duration: const Duration(milliseconds: 400),
-          tabBackgroundColor: Colors.grey[100]!,
           color: Colors.green[500]!,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         ),
